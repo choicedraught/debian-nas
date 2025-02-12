@@ -8,8 +8,8 @@
 
   roles:
     - geerlingguy.security
-    - geerlingguy.samba
-    - geerlingguy.sanoid
+    # - geerlingguy.samba
+    # - geerlingguy.sanoid
 
   tasks:
     - name: Configure user accounts.
@@ -31,19 +31,19 @@
       loop: "{{ zfs_pools }}"
       tags: ['zfs']
 
-    - name: Create volumes for Samba shares.
-      community.general.zfs:
-        name: "{{ item.name }}"
-        state: present
-        extra_zfs_properties: "{{ item.extra_zfs_properties }}"
-      loop: "{{ zfs_samba_shares }}"
-      tags: ['zfs', 'samba']
+    # - name: Create volumes for Samba shares.
+    #   community.general.zfs:
+    #     name: "{{ item.name }}"
+    #     state: present
+    #     extra_zfs_properties: "{{ item.extra_zfs_properties }}"
+    #   loop: "{{ zfs_samba_shares }}"
+    #   tags: ['zfs', 'samba']
 
-    - name: Configure Samba shares.
-      include_tasks: tasks/samba.yml
+    # - name: Configure Samba shares.
+    #   include_tasks: tasks/samba.yml
 
     - name: Configure user for ZFS replication.
       include_tasks: tasks/replication.yml
 
-    - name: Set up rclone.
-      include_tasks: tasks/rclone.yml
+    # - name: Set up rclone.
+    #   include_tasks: tasks/rclone.yml

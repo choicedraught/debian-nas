@@ -1,21 +1,20 @@
-# Arm NAS
+# Debian NAS
 
-Ansible playbook to configure my Arm NASes:
+Ansible playbook to configure my Debian NAS, forked from Jeff Geerling's arm-nas repo
 
-  - [HL15 with Ampere Altra](#primary-nas)
-  - [Raspberry Pi 5 SATA NAS](#secondary-nas)
+  - [Giga-Byte H97N-Wifi Pentium NAS](#ssd-nas)
 
 ## Hardware
 
-### <a name="primary-nas"></a>Primary NAS - 45Drives HL15
+### <a name="ssd-nas"></a>Primary NAS - 45Drives HL15
 
 <p align="center"><img alt="45Homelab HL15 with Jeff Geerling hardware" src="/resources/hl15-hardware.jpeg" height="auto" width="600"></p>
 
-The current iteration of the HL15 I'm running contains the following hardware:
+The Debian NAS contains the following hardware:
 
-  - (Motherboard) [ASRock Rack ALTRAD8UD-1L2T](https://reurl.cc/qrnXNp) ([specs](https://reurl.cc/67jk0V))
+  - (Motherboard) [Giga-Byte H97N-Wifi](https://www.gigabyte.com/au/Motherboard/GA-H97N-WIFI-rev-10/support#support-dl-driver)
   - (Case) [45Homelab HL15 + backplane + PSU](https://store.45homelab.com/configure/hl15)
-  - (PSU) [Corsair RM750e](https://amzn.to/3OyDQ79)
+  - (PSU) [Intel Pentium G3450](https://www.intel.com/content/www/us/en/products/sku/80792/intel-pentium-processor-g3450-3m-cache-3-40-ghz/specifications.html)
   - (RAM) [8x Samsung 16GB 1Rx4 ECC RDIMM M393A2K40DB3-CWE PC25600](https://amzn.to/49lCtkb)
   - (NVMe) [Kioxia XG8 2TB NVMe SSD](https://amzn.to/3Uzag5d)
   - (CPU) [Ampere Altra Q32-17](https://amperecomputing.com/briefs/ampere-altra-family-product-brief)
@@ -51,17 +50,45 @@ Some of the above links are affiliate links. I have a series of videos showing h
 
 ## Preparing the hardware
 
-The HL15 should not require any special prep, besides having Ubuntu installed. The Raspberry Pi 5 is running Debian (Pi OS) and needs its PCIe connection enabled. To do that:
+The Debian NAS was a base install of Debian 9 netinst followed by the configuration below:
 
-  1. Edit the boot config: `sudo nano /boot/firmware/config.txt`
-  2. Add in the following config at the bottom and save the file:
+  1. Configure the network bond based on [this article](https://www.snel.com/support/lacp-bonding-on-debian-7-8-9/)
+  2. `apt-get install ifenslave`
+  3. Update the `/etc/network/interfaces` 
 
+     ``` bash
+      # This file describes the network interfaces available on your system
+      # and how to activate them. For more information, see interfaces(5).
+
+      source /etc/network/interfaces.d/*
+
+      # The loopback network interface
+      auto lo
+      iface lo inet loopback
+
+      # The primary network interface
+      allow-hotplug eno1
+      iface eno1 inet manual
+              mtu 9000
+
+      allow-hotplug enp2s0
+      iface enp2s0 inet manual
+              mtu 9000
+
+      auto bond0
+      iface bond0 inet dhcp
+              slaves eno1 enp2s0
+              #mtu 9000 # this wasn't working for some reason.  Moved to the post-up below
+              bond-mode 802.3ad
+              bond-miimon 100
+              bond-downdelay 200
+              bond-updelay 200
+              post-up ip link set $IFACE mtu 9000
      ```
-     dtparam=pciex1
-     dtparam=pciex1_gen=3
-     ```
-  
-  3. Reboot
+
+  4. Reboot
+  5. Configure static DHCP assignment in UniFi Controller
+  6. Run ansible onboarding script & ensure the Ansible host can contact the Debian NAS (ssh hostkey)
 
 Confirm the SATA drives are recognized with `lsblk`.
 
