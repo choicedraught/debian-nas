@@ -8,6 +8,7 @@
 
   roles:
     - geerlingguy.security
+    - geerlingguy.nfs
     # - geerlingguy.samba
     # - geerlingguy.sanoid
 

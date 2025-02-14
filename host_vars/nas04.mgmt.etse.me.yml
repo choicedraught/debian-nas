@@ -1,0 +1,40 @@
+---
+# HL15 Variables.
+
+# For `members` key, format as the end of the `zpool create` command.
+zfs_pools:
+  - name: ssdpool
+    members: >-
+      raidz1
+      /dev/disk/by-id/wwn-0x5000c500e3da1887
+      /dev/disk/by-id/wwn-0x5000c500e3d9c525
+      /dev/disk/by-id/wwn-0x5000c500e3d9c560
+      /dev/disk/by-id/wwn-0x5000c500e3d61ce0
+      /dev/disk/by-id/wwn-0x5000c500e3d4848c
+      /dev/disk/by-id/wwn-0x5000c500e3d5107b
+
+zfs_nfs_exports:
+  - name: ssdpool/pvenfs02
+    extra_zfs_properties:
+      casesensitivity: 'mixed'
+      compression: 'lz4'
+      # smb_share_name: jupiter
+      # smb_comment: Archival storage pool on HDDs.
+
+# sanoid_conf: >
+#   [hddpool/jupiter]
+#     use_template = production
+#     recursive = yes
+
+#   [nvmepool/mercury]
+#     use_template = production
+#     recursive = yes
+
+#   [template_production]
+#     frequently = 0
+#     hourly = 24
+#     daily = 30
+#     monthly = 3
+#     yearly = 0
+#     autosnap = yes
+#     autoprune = yes
