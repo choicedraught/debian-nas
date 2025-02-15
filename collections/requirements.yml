@@ -1,5 +1,5 @@
 ---
-roles:
+collections:
 - name: geerlingguy.security
   version: 2.4.0
   source: https://galaxy.ansible.com
