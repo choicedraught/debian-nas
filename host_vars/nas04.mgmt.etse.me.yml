@@ -5,13 +5,9 @@
 zfs_pools:
   - name: ssdpool
     members: >-
-      raidz1
-      /dev/disk/by-id/wwn-0x5000c500e3da1887
-      /dev/disk/by-id/wwn-0x5000c500e3d9c525
-      /dev/disk/by-id/wwn-0x5000c500e3d9c560
-      /dev/disk/by-id/wwn-0x5000c500e3d61ce0
-      /dev/disk/by-id/wwn-0x5000c500e3d4848c
-      /dev/disk/by-id/wwn-0x5000c500e3d5107b
+      mirror
+      /dev/disk/by-id/wwn-0x5e83a979186ade0c
+      /dev/disk/by-id/wwn-0x500a07510956dcb7
 
 zfs_nfs_exports:
   - name: ssdpool/pvenfs02
