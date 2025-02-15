@@ -1,0 +1,4 @@
+---
+collections:
+- name: geerlingguy.security
+- name: geerlingguy.nfs
