@@ -1,8 +1,8 @@
 ---
-collections:
-- name: geerlingguy.security
-  version: 2.4.0
-  source: https://galaxy.ansible.com
-- name: geerlingguy.nfs
-  version: 2.1.0
-  source: https://galaxy.ansible.com
+roles:
+  - name: geerlingguy.security
+    version: 2.4.0
+    source: https://galaxy.ansible.com
+  - name: geerlingguy.nfs
+    version: 2.1.0
+    source: https://galaxy.ansible.com
