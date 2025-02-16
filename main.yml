@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: nas
   become: true
   gather_facts: true
 
